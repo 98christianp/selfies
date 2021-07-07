@@ -10,6 +10,13 @@ default_bond_constraints = {
     'S': 6, 'S+1': 7, 'S-1': 5,
     '?': 8
 }
+qm9_bond_constraints = {
+    'H': 1,
+    'O': 2, 'O+1': 3, 'O-1': 1,
+    'N': 3, 'N+1': 4, 'N-1': 2,
+    'C': 4, 'C+1': 5, 'C-1': 3,
+    '?': 8
+}
 
 octet_rule_bond_constraints = dict(default_bond_constraints)
 octet_rule_bond_constraints.update(
@@ -24,7 +31,7 @@ hypervalent_bond_constraints.update(
 _bond_constraints = default_bond_constraints
 
 
-def get_semantic_robust_alphabet() -> Set[str]:
+def get_semantic_robust_alphabet(manual_organic=None, qm9=False) -> Set[str]:
     """Returns a subset of all symbols that are semantically constrained
     by :mod:`selfies`.
 
@@ -33,10 +40,19 @@ def get_semantic_robust_alphabet() -> Set[str]:
 
     :return: a subset of all symbols that are semantically constrained.
     """
+    if manual_organic:
+        # TODO
+        pass
 
     alphabet_subset = set()
+    if qm9:
+        organic_subset = {'C', 'N', 'O', 'F'}
+        _bond_constraints = qm9_bond_constraints
+               
+    else:
 
-    organic_subset = {'B', 'C', 'N', 'O', 'S', 'P', 'F', 'Cl', 'Br', 'I'}
+        organic_subset = {'B', 'C', 'N', 'O', 'S', 'P', 'F', 'Cl', 'Br', 'I'}
+        _bond_constraints = default_bond_constraints
     bonds = {'': 1, '=': 2, '#': 3}
 
     # add atomic symbols
